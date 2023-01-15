@@ -2,8 +2,6 @@ import React, {useState} from "react";
 import "./App.css";
 import {Todolist} from "./Todolist";
 
-export type FilterValuesType = "all" | "active" | "completed" | "three";
-
 //1. Давайте создадим кнопку «УДАЛИТЬ ВСЕ ЗАДАЧИ» и разместим ее над кнопками фильтра.
 //Нажатие на кнопку удаляет все задачи
 //2. Давайте создадим четвертую кнопку фильтра — если вы нажмете на нее, отобразятся первые три задачи.
@@ -23,6 +21,8 @@ export type FilterValuesType = "all" | "active" | "completed" | "three";
 // function changeFilter(value: FilterValuesType) {
 //     setFilter(value);
 // }
+export type FilterValuesType = "all" | "active" | "completed" | "three";
+
 type TaskType = { id: number, title: string, isDone: boolean }
 
 function App() {
@@ -34,11 +34,7 @@ function App() {
         {id: 4, title: "Rest API", isDone: false},
         {id: 5, title: "GraphQL", isDone: false},
     ]);
-    let [filter, setFilter] = useState<FilterValuesType>("all");
 
-    function changeFilter(value: FilterValuesType) {
-         setFilter(value);
-    }
 
     function removeTask(id: number) {
         let filteredTasks = tasks.filter(t => t.id != id);
@@ -49,26 +45,13 @@ function App() {
         setTasks([])
     }
 
-    let tasksForTodolist = tasks;
-
-    if (filter === "active") {
-        tasksForTodolist = tasks.filter(t => t.isDone === false);
-    }
-    if (filter === "completed") {
-        tasksForTodolist = tasks.filter(t => t.isDone === true);
-    }
-    if (filter === "three") {
-        tasksForTodolist = tasks.filter(t => t.id !== 4).filter(t => t.id !== 5);
-    }
-
-
     return (
         <div className="App">
             <Todolist title="What to learn"
-                      tasks={tasksForTodolist}
+                      tasks={tasks}
                       removeTask={removeTask}
                       removeAllTasks={removeAllTasks}
-                      changeFilter={changeFilter}/>
+                      />
         </div>
     );
 }
