@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
 import './App.css';
 import {Todolist} from './Todolist';
-import { v1 } from 'uuid';
+import {v1} from "uuid";
+
 
 // Hi guys!
 //1. Попробуем альтернативный способ. Вместо useState мы можем попробовать useRef in Todolist.tsx:

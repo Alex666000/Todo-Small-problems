@@ -1,5 +1,5 @@
-import React, {ChangeEvent, KeyboardEvent, useRef, useState} from 'react';
-import {FilterValuesType} from './App';
+import React, {ChangeEvent, KeyboardEvent, useRef, useState} from "react";
+import {FilterValuesType} from "./App";
 
 type TaskType = {
     id: string
@@ -19,8 +19,11 @@ export function Todolist(props: PropsType) {
     let [title, setTitle] = useState("")
 
     const addTask = () => {
-        props.addTask(title);
-        setTitle("");
+        if (onChangeRef.current) {
+            props.addTask(onChangeRef.current.value);
+            setTitle("");
+        }
+
     }
 
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
@@ -29,7 +32,7 @@ export function Todolist(props: PropsType) {
 
 
     const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Enter') {
+        if (e.key === "Enter") {
             addTask();
         }
     }
@@ -37,15 +40,20 @@ export function Todolist(props: PropsType) {
     const onAllClickHandler = () => props.changeFilter("all");
     const onActiveClickHandler = () => props.changeFilter("active");
     const onCompletedClickHandler = () => props.changeFilter("completed");
+    // useRef:
+    const onChangeRef = useRef<HTMLInputElement>(null)
 
     return <div>
         <h3>{props.title}</h3>
         <div>
-            <input value={title}
-                   onChange={onChangeHandler}
-                   onKeyPress={onKeyPressHandler}
+            {/*useRef:*/}
+            <input
+                // value={title}
+                // onChange={onChangeHandler}
+                ref={onChangeRef}
+                onKeyPress={onKeyPressHandler}
             />
-            <button onClick={addTask}>+</button>
+            <button onClick={addTask}>ADD</button>
         </div>
         <ul>
             {
@@ -68,21 +76,6 @@ export function Todolist(props: PropsType) {
         </div>
     </div>
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 //----------------------------------------------------------------------------------
