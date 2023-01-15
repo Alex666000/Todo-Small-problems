@@ -41,10 +41,15 @@ type PropsType =
 
 function App() {
     const [todos, setTodos] = useState<Array<PropsType>>([])
+    const axiosRequest = () => {
+        axios.get("https://jsonplaceholder.typicode.com/todos")
+            .then((res) => {setTodos(res.data)})
+    }
 
     useEffect(() => {
-        axios.get("https://jsonplaceholder.typicode.com/todos")
-            .then(response => setTodos(response.data))
+        // axios.get("https://jsonplaceholder.typicode.com/todos")
+        //     .then(response => setTodos(response.data))
+        axiosRequest()
     }, [])
 
     const onClickHandler = () => {
@@ -52,10 +57,9 @@ function App() {
     }
 
     const onClickHandlerForRedisplay = () => {
-        axios.get("https://jsonplaceholder.typicode.com/todos")
-            .then((res) => {
-                setTodos(res.data)
-            })
+        // axios.get("https://jsonplaceholder.typicode.com/todos")
+        //     .then((res) => {setTodos(res.data)})
+        axiosRequest()
     }
     // перенести map в переменную и ее отрисовали
     const mapTodos = todos.map(el => {
