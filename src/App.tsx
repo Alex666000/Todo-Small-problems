@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import './App.css';
+import React, {useEffect, useState} from "react";
+import "./App.css";
 import axios from "axios";
 
 // Привет, ребята! Давайте усилим нашу сессию:
@@ -31,7 +31,7 @@ import axios from "axios";
 // 4. У нас возникла проблема. Код дублируется (axios.get...). Давайте создадим новую функцию и используем ее там, где нам нужно.
 //Удачи!
 
-type PropsType=
+type PropsType =
     {
         userId: number,
         id: number,
@@ -42,13 +42,20 @@ type PropsType=
 function App() {
     const [todos, setTodos] = useState<Array<PropsType>>([])
 
-    useEffect(()=>{
-        axios.get('https://jsonplaceholder.typicode.com/todos')
+    useEffect(() => {
+        axios.get("https://jsonplaceholder.typicode.com/todos")
             .then(response => setTodos(response.data))
-    },[])
+    }, [])
 
     const onClickHandler = () => {
         setTodos([])
+    }
+
+    const onClickHandlerForRedisplay = () => {
+        axios.get("https://jsonplaceholder.typicode.com/todos")
+            .then((res) => {
+                setTodos(res.data)
+            })
     }
     // перенести map в переменную и ее отрисовали
     const mapTodos = todos.map(el => {
@@ -64,6 +71,7 @@ function App() {
     return (
         <div className="App">
             <button onClick={onClickHandler}>CLEAN POSTS</button>
+            <button onClick={onClickHandlerForRedisplay}>ADD POSTS</button>
             <ul>
                 {mapTodos}
             </ul>
@@ -73,20 +81,6 @@ function App() {
 
 export default App;
 //----------------------------------------------------------------------------------------
-
-// import React, {useEffect, useState} from 'react';
-// import './App.css';
-// import axios from "axios";
-//
-//
-// type PropsType =
-//     {
-//         userId: number,
-//         id: number,
-//         title: string,
-//         completed: boolean
-//     }
-//
 // function App() {
 //     const [todos, setTodos] = useState<Array<PropsType>>([])
 //
