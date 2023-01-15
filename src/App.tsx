@@ -50,24 +50,23 @@ function App() {
     const onClickHandler = () => {
         setTodos([])
     }
+    // перенести map в переменную и ее отрисовали
+    const mapTodos = todos.map(el => {
+        return (
+            <li key={el.id}>
+                <span>{el.id} - </span>
+                <span>{el.title}</span>
+                <span>{el.completed}</span>
+            </li>
+        )
+    })
 
     return (
         <div className="App">
             <button onClick={onClickHandler}>CLEAN POSTS</button>
             <ul>
-                {todos.map(el => {
-                    return (
-                        <li>
-                            <span>{el.id} - </span>
-                            <span>{el.title}</span>
-                            <span>{el.completed}</span>
-                        </li>
-                    )
-                })}
-
+                {mapTodos}
             </ul>
-
-
         </div>
     );
 }
