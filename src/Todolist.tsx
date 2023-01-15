@@ -1,5 +1,4 @@
 import React, {ChangeEvent, KeyboardEvent, useRef, useState} from "react";
-import {FilterValuesType} from "./App";
 import {useAutoAnimate} from "@formkit/auto-animate/react";
 
 type TaskType = {
@@ -13,7 +12,7 @@ type PropsType = {
     title: string
     tasks: Array<TaskType>
     removeTask: (taskId: string) => void
-    changeFilter: (value: FilterValuesType) => void
+    changeFilter: (value: any) => void
     addTask: (title: string) => void
 }
 

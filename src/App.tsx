@@ -1,189 +1,156 @@
-import React, {useState} from "react";
-import "./App.css";
-import {Todolist} from "./Todolist";
-import {v1} from "uuid";
+import React, {useEffect, useState} from 'react';
+import './App.css';
+import axios from "axios";
 
+// Привет, ребята! Давайте усилим нашу сессию:
 
-// Hi guys!
-//1. Попробуем альтернативный способ. Вместо useState мы можем попробовать useRef in Todolist.tsx:
-// <input
-//     //value={title}
-//     // onChange={ onChangeHandler }
-//     ref={onChangeRef}
-//     onKeyPress={onKeyPressHandler}
-// />
-// let onChangeRef = useRef<HTMLInputElement>(null)
-// Inside of  const addTask = () => {} use onChangeRef.current.value
-// 2. Let's try children and F.C:
-// We will use double 'tag' <Todolist></Todolist>
-// <Todolist title="What to learn"
-//           tasks={tasksForTodolist}
-//           removeTask={removeTask}
-//           changeFilter={changeFilter}
-//           addTask={addTask} >
-//     <div>
-//         <div>Many intresting information</div>
-//      </div>
-// </Todolist>
-//Inside of Todolist.tsx
-// Type out changes in PropsType: children?:React.ReactNode
-// export const Todolist:React.FC<PropsType>=({children, ...props}) =>{
-//     return(
-//         <div>
-//             <div>...</div>
-//             {children}
-//         </div>
-//      )
-// }
-// 3. Let's append some animation in our project:
-//yarn add  @formkit/auto-animate -D
-// we use -D, because the best practice is to add new extensions to the object inside the package.json
-// "devDependencies": {
-//     "@formkit/auto-animate": "^1.0.0-beta.3"
-//   }
-// const [listRef] = useAutoAnimate<HTMLUListElement>() in Todolist.tsx
-// <ul ref={listRef}>
-// Смотрите, как плавно добавляются задания!
-// P.S. Вы понимаете, почему новая задача добавляется во все Todolists?
-// [потому что у нас есть только одно состояние для всех наших тодолистов, но мы поговорим об этом во вторник.]
+// 1. Устанавливаем AXIOS - это библиотека для HTTP-запросов. Мы используем его вместо метода FETCH.
 
+// https://axios-http.com/ru/docs/intro
+// yarn add axios
 
-export type FilterValuesType = "all" | "active" | "completed";
+// axios.get('https://jsonplaceholder.typicode.com/todos')
+//     .then((res) => {
+//         setTodos(res.data)
+//     })
+
+//2. Давайте переместим наш метод map и обернем его новой переменной:
+//const mapTodos=todos.map(el => {...
+
+// return (
+//     <div className="App">
+//         <button onClick={onClickHandler}>CLEAN POSTS</button>
+//         <ul>
+//             {mapTodos}
+//         </ul>
+//     </div>
+// );
+
+// 3. Создайте новую кнопку для повторного отображения наших данных
+
+// 4. У нас возникла проблема. Код дублируется (axios.get...). Давайте создадим новую функцию и используем ее там, где нам нужно.
+//Удачи!
+
+type PropsType=
+    {
+        userId: number,
+        id: number,
+        title: string,
+        completed: boolean
+    }
 
 function App() {
+    const [todos, setTodos] = useState<Array<PropsType>>([])
 
-    let [tasks, setTasks] = useState([
-        {id: v1(), title: "HTML&CSS", isDone: true},
-        {id: v1(), title: "JS", isDone: true},
-        {id: v1(), title: "ReactJS", isDone: false},
-        {id: v1(), title: "Rest API", isDone: false},
-        {id: v1(), title: "GraphQL", isDone: false},
-    ]);
+    useEffect(()=>{
+        axios.get('https://jsonplaceholder.typicode.com/todos')
+            .then(response => setTodos(response.data))
+    },[])
 
-    function removeTask(id: string) {
-        let filteredTasks = tasks.filter(t => t.id != id);
-        setTasks(filteredTasks);
-    }
-
-    function addTask(title: string) {
-        let task = {id: v1(), title: title, isDone: false};
-        let newTasks = [task, ...tasks];
-        setTasks(newTasks);
-    }
-
-    let [filter, setFilter] = useState<FilterValuesType>("all");
-
-    let tasksForTodolist = tasks;
-
-    if (filter === "active") {
-        tasksForTodolist = tasks.filter(t => t.isDone === false);
-    }
-    if (filter === "completed") {
-        tasksForTodolist = tasks.filter(t => t.isDone === true);
-    }
-
-    function changeFilter(value: FilterValuesType) {
-        setFilter(value);
+    const onClickHandler = () => {
+        setTodos([])
     }
 
     return (
         <div className="App">
-            <Todolist title="What to learn"
-                      tasks={tasksForTodolist}
-                      removeTask={removeTask}
-                      changeFilter={changeFilter}
-                      addTask={addTask}>
-                <div>
-                    <div>Many intresting information</div>
-                </div>
-            </Todolist>
+            <button onClick={onClickHandler}>CLEAN POSTS</button>
+            <ul>
+                {todos.map(el => {
+                    return (
+                        <li>
+                            <span>{el.id} - </span>
+                            <span>{el.title}</span>
+                            <span>{el.completed}</span>
+                        </li>
+                    )
+                })}
+
+            </ul>
+
+
         </div>
     );
 }
 
 export default App;
+//----------------------------------------------------------------------------------------
 
-
-//-------------------------------------------------------------------------------------------------------
+// import React, {useEffect, useState} from 'react';
+// import './App.css';
+// import axios from "axios";
 //
-// export type FilterValuesType = "all" | "active" | "completed";
+//
+// type PropsType =
+//     {
+//         userId: number,
+//         id: number,
+//         title: string,
+//         completed: boolean
+//     }
 //
 // function App() {
+//     const [todos, setTodos] = useState<Array<PropsType>>([])
 //
-//     let [tasks, setTasks] = useState([
-//         {id: v1(), title: "HTML&CSS", isDone: true},
-//         {id: v1(), title: "JS", isDone: true},
-//         {id: v1(), title: "ReactJS", isDone: false},
-//         {id: v1(), title: "Rest API", isDone: false},
-//         {id: v1(), title: "GraphQL", isDone: false},
-//     ]);
-//
-//     function removeTask(id: string) {
-//         let filteredTasks = tasks.filter(t => t.id != id);
-//         setTasks(filteredTasks);
+//     const axiosRequest=()=>{
+//         axios.get('https://jsonplaceholder.typicode.com/todos')
+//             .then((res) => {
+//                 setTodos(res.data)
+//             })
 //     }
 //
-//     function addTask(title: string) {
-//         let task = {id: v1(), title: title, isDone: false};
-//         let newTasks = [task, ...tasks];
-//         setTasks(newTasks);
+//     useEffect(() => {
+//         // fetch('https://jsonplaceholder.typicode.com/todos')
+//         //     .then(response => response.json())
+//         //     .then(json => setTodos(json))
+//
+//         // axios.get('https://jsonplaceholder.typicode.com/todos')
+//         //     .then((res) => {
+//         //         setTodos(res.data)
+//         //     })
+//
+//         axiosRequest()
+//     }, [])
+//
+//     const mapTodos=todos.map(el=>{
+//         return (
+//             <li>
+//                 <span>{el.id} - </span>
+//                 <span>{el.title}</span>
+//                 <span>{el.completed}</span>
+//             </li>
+//         )
+//     })
+//
+//     const onClickHandler = () => {
+//         setTodos([])
 //     }
 //
-//     let [filter, setFilter] = useState<FilterValuesType>("all");
+//     const onClickHandlerForRedisplay=()=>{
+//         // axios.get('https://jsonplaceholder.typicode.com/todos')
+//         //     .then((res) => {
+//         //         setTodos(res.data)
+//         //     })
 //
-//     let tasksForTodolist = tasks;
-//
-//     if (filter === "active") {
-//         tasksForTodolist = tasks.filter(t => t.isDone === false);
+//         axiosRequest()
 //     }
-//     if (filter === "completed") {
-//         tasksForTodolist = tasks.filter(t => t.isDone === true);
-//     }
-//
-//     function changeFilter(value: FilterValuesType) {
-//         setFilter(value);
-//     }
-//
 //
 //     return (
 //         <div className="App">
-//             <Todolist title="What to learn"
-//                       tasks={tasksForTodolist}
-//                       removeTask={removeTask}
-//                       changeFilter={changeFilter}
-//                       addTask={addTask}>
-//                 <div>
-//                     <div>Many intresting information</div>
-//                     <div>Many intresting information</div>
-//                     <div>Many intresting information</div>
-//                     <div>Many intresting information</div>
-//                     <div>Many intresting information</div>
-//                 </div>
-//             </Todolist>
+//             <button onClick={onClickHandler}>CLEAN POSTS</button>
+//             <button onClick={onClickHandlerForRedisplay}>REDISPLAY</button>
+//             <ul>
+//                 {/*{todos.map(el => {*/}
+//                 {/*    return (*/}
+//                 {/*        <li>*/}
+//                 {/*            <span>{el.id} - </span>*/}
+//                 {/*            <span>{el.title}</span>*/}
+//                 {/*            <span>{el.completed}</span>*/}
+//                 {/*        </li>*/}
+//                 {/*    )*/}
+//                 {/*})}*/}
 //
-//             <Todolist title="What to learn"
-//                       tasks={tasksForTodolist}
-//                       removeTask={removeTask}
-//                       changeFilter={changeFilter}
-//                       addTask={addTask}>
-//                 <div>
-//                     <div>A lot of boring information</div>
-//                     <div>A lot of boring information</div>
-//                     <div>A lot of boring information</div>
-//                     <input placeholder={'A lot of boring information'}/>
-//                     <div>
-//                         <button>Boring Button 1</button>
-//                         <button>Boring Button 2</button>
-//                         <button>Boring Button 3</button>
-//                     </div>
-//                 </div>
-//             </Todolist>
-//
-//             <Todolist title="What to learn"
-//                       tasks={tasksForTodolist}
-//                       removeTask={removeTask}
-//                       changeFilter={changeFilter}
-//                       addTask={addTask}/>
+//                 {mapTodos}
+//             </ul>
 //         </div>
 //     );
 // }
