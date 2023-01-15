@@ -43,9 +43,9 @@ import {v1} from "uuid";
 //   }
 // const [listRef] = useAutoAnimate<HTMLUListElement>() in Todolist.tsx
 // <ul ref={listRef}>
-//Look how smoothly the tasks are added!
-//P.S. Do you understand why a new task append in all Todolists?
-// [because we only have one state for all our todolists, but we'll talk about that on Tuesday.]
+// Смотрите, как плавно добавляются задания!
+// P.S. Вы понимаете, почему новая задача добавляется во все Todolists?
+// [потому что у нас есть только одно состояние для всех наших тодолистов, но мы поговорим об этом во вторник.]
 
 
 export type FilterValuesType = "all" | "active" | "completed";
