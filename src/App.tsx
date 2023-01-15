@@ -1,170 +1,127 @@
-import React from "react";
-import "./App.css";
+import React, {useState} from 'react';
+import './App.css';
+import {Todolist} from './Todolist';
 
-// Привет, друзья!
-// Давайте усилим нашу текущую сессию!
-// -У вас есть 2 массива. Вам следует создать новый компонент TASKS, в котором вы будете рендерить эти массивы.
-// -Не забудьте присвоить нашим данным типы.
+export type FilterValuesType = "all" | "active" | "completed";
 
-type TaskType = {
-    taskId: number
-    title: string
-    isDone: boolean
-}
-type DataType = {
-    title: string
-    tasks: TaskType[]
-    students: string[]
-}
+//1. Давайте создадим кнопку «УДАЛИТЬ ВСЕ ЗАДАЧИ» и разместим ее над кнопками фильтра.
+//Нажатие на кнопку удаляет все задачи
+//2. Давайте создадим четвертую кнопку фильтра — если вы нажмете на нее, отобразятся первые три задачи.
+//3. Переместите все, что связано с фильтрами, в компонент Todolist.tsx. Сделай так, чтобы это работало
+//
+// let [filter, setFilter] = useState<FilterValuesType>("all");
+//
+// let tasksForTodolist = tasks;
+//
+// if (filter === "active") {
+//     tasksForTodolist = tasks.filter(t => t.isDone === false);
+// }
+// if (filter === "completed") {
+//     tasksForTodolist = tasks.filter(t => t.isDone === true);
+// }
+//
+// function changeFilter(value: FilterValuesType) {
+//     setFilter(value);
+// }
 
 function App() {
 
-    const data1 = {
-        title: "What to do",
-        tasks: [
-            {taskId: 1, title: "HTML&CSS2", isDone: true},
-            {taskId: 2, title: "JS2", isDone: true}
-        ],
-        students: [
-            "Jago Wormald1",
-            "Saul Milne2",
-            "Aariz Hester3",
-        ]
-    }
-    const data2 = {
-        title: "What to learn",
-        tasks: [
-            {taskId: 1, title: "HTML&CSS", isDone: true},
-            {taskId: 2, title: "JS", isDone: true}
-        ],
-        students: [
-            "Rick Kane",
-            "Finnlay Bentley",
-        ]
-    }
-    return (
-        <div>
-            <Tasks data={data1}/>
-            <Tasks data={data2}/>
-        </div>
-    )
-}
+    let [tasks, setTasks] = useState([
+        {id: 1, title: "HTML&CSS", isDone: true},
+        {id: 2, title: "JS", isDone: true},
+        {id: 3, title: "ReactJS", isDone: false},
+        {id: 4, title: "Rest API", isDone: false},
+        {id: 5, title: "GraphQL", isDone: false},
+    ]);
 
-type TasksPropsType = {
-    data: DataType
-}
+    function removeTask(id: number) {
+        let filteredTasks = tasks.filter(t => t.id != id);
+        setTasks(filteredTasks);
+    }
 
-const Tasks = (props: TasksPropsType) => {
+    let [filter, setFilter] = useState<FilterValuesType>("all");
+
+    let tasksForTodolist = tasks;
+
+    if (filter === "active") {
+        tasksForTodolist = tasks.filter(t => t.isDone === false);
+    }
+    if (filter === "completed") {
+        tasksForTodolist = tasks.filter(t => t.isDone === true);
+    }
+
+    function changeFilter(value: FilterValuesType) {
+        setFilter(value);
+    }
+
     return (
-        <div>
-            <h1>{props.data.title}</h1>
-            <ul>
-                <li>{props.data.tasks.map((task) => {
-                    return (
-                        <li>
-                            <span>{task.taskId}</span>
-                            <span>{task.title}</span>
-                            <span>{task.isDone}</span>
-                        </li>
-                    )
-                })}</li>
-            </ul>
-            <ul>
-                <li>{props.data.students.map(student =>
-                    <li>{student}</li>)}</li>
-            </ul>
+        <div className="App">
+            <Todolist title="What to learn"
+                      tasks={tasksForTodolist}
+                      removeTask={removeTask}
+                      changeFilter={changeFilter}/>
         </div>
-    )
+    );
 }
 
 export default App;
 
-//--------------------------------------------------------------
-// import React from 'react';
+
+//-------------------------------------------------------------------------
+
+// import React, {useState} from 'react';
 // import './App.css';
-// import {Tasks} from "./Tasks";
+// import {Todolist} from './Todolist';
 //
-// export type DataType = {
-//     title: string
-//     tasks: Array<TasksType>
-//     students: Array<string>
-// }
-// export type TasksType = {
-//     taskId: number
-//     title: string
-//     isDone: boolean
-// }
 //
+// export type FilterValuesType = "all" | "active" | "completed" | "three";
 //
 // function App() {
-//     const data1= {
-//         title: "What to do",
-//         tasks: [
-//             {taskId: 1, title: "HTML&CSS2", isDone: true},
-//             {taskId: 2, title: "JS2", isDone: true}
-//         ],
-//         students: [
-//             'Jago Wormald1',
-//             'Saul Milne2',
-//             'Aariz Hester3',
-//             'Dion Reeve4',
-//             'Anisa Ortega5',
 //
-//         ]
+//     let [tasks, setTasks] = useState([
+//         {id: 1, title: "HTML&CSS", isDone: true},
+//         {id: 2, title: "JS", isDone: true},
+//         {id: 3, title: "ReactJS", isDone: false},
+//         {id: 4, title: "Rest API", isDone: false},
+//         {id: 5, title: "GraphQL", isDone: false},
+//     ]);
+//
+//     const deleteAllTasks = () => {
+//         setTasks([])
 //     }
-//     const data2 = {
-//         title: "What to learn",
-//         tasks: [
-//             {taskId: 1, title: "HTML&CSS", isDone: true},
-//             {taskId: 2, title: "JS", isDone: true}
-//         ],
-//         students: [
-//             'Rick Kane',
-//             'Finnlay Bentley',
+//
+//     function removeTask(id: number) {
+//         let filteredTasks = tasks.filter(t => t.id != id);
+//         setTasks(filteredTasks);
 //     }
+//
+//     // let [filter, setFilter] = useState<FilterValuesType>("all");
+//     //
+//     // let tasksForTodolist = tasks;
+//     //
+//     // if (filter === "active") {
+//     //     tasksForTodolist = tasks.filter(t => t.isDone === false);
+//     // }
+//     // if (filter === "completed") {
+//     //     tasksForTodolist = tasks.filter(t => t.isDone === true);
+//     // }
+//     //
+//     // function changeFilter(value: FilterValuesType) {
+//     //     setFilter(value);
+//     // }
 //
 //     return (
 //         <div className="App">
-//             <Tasks data={data1}/>
-//             <Tasks data={data2}/>
+//             <Todolist
+//                 title="What to learn"
+//                 tasks={tasks}
+//                 removeTask={removeTask}
+//                 //changeFilter={changeFilter}
+//                 deleteAllTasks={deleteAllTasks}
+//
+//             />
 //         </div>
 //     );
 // }
 //
 // export default App;
-
-// import React from 'react';
-// import {DataType} from "./App";
-//
-// type  TasksPropsType = {
-//     data: DataType
-// }
-//
-// export const Tasks = (props: TasksPropsType) => {
-//     return (
-//         <div>
-//             <h1>{props.data.title}</h1>
-//             <ul>
-//                 {props.data.tasks.map(el => {
-//                     return (
-//                         <li>
-//                             <span>{el.taskId}</span>
-//                             <span>{el.title}</span>
-//                             <span>{el.isDone}</span>
-//                         </li>
-//                     )
-//                 })}
-//             </ul>
-//
-//             <ul>
-//                 {props.data.students.map(el => {
-//                     return (
-//                         <li>{el}</li>
-//                     )
-//                 })}
-//             </ul>
-//         </div>
-//     );
-// };
-
-//--------------------------------------------------------------
